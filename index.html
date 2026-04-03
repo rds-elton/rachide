@@ -139,9 +139,37 @@
 <div class="setup-screen" id="setup-screen">
   <h2>racha/</h2>
   <p>Para acessar um grupo use o link compartilhado. Para começar um grupo novo, clique abaixo.</p>
-  <button class="btn btn-primary" style="max-width:320px;margin-bottom:10px" onclick="createGroup()">criar novo grupo</button>
-  <button class="btn" style="max-width:320px" onclick="enterCode()">entrar com link ou código</button>
+  <button class="btn btn-primary" style="max-width:320px;margin-bottom:10px" onclick="showCreateModal()">criar novo grupo</button>
+  <button class="btn" style="max-width:320px" onclick="showEnterModal()">entrar com link ou código</button>
 </div>
+
+<!-- MODAL: criar grupo -->
+<div class="modal-bg" id="modal-create" onclick="closeModal('modal-create')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title">criar novo grupo</div>
+    <div class="form-group"><label>nome do grupo</label><input type="text" id="m-name" placeholder="ex: Os Inconsequentes"/></div>
+    <div class="form-group"><label>membros (separados por vírgula)</label><input type="text" id="m-members" placeholder="Elton, Carol, Rafael, Bia, Thiago"/></div>
+    <button class="btn btn-primary" onclick="doCreateGroup()">criar grupo</button>
+    <button class="btn" style="margin-top:8px" onclick="closeModal('modal-create')">cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL: entrar com código -->
+<div class="modal-bg" id="modal-enter" onclick="closeModal('modal-enter')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title">entrar num grupo</div>
+    <div class="form-group"><label>cole o link ou código do grupo</label><input type="text" id="m-code" placeholder="https://... ou código"/></div>
+    <button class="btn btn-primary" onclick="doEnterCode()">entrar</button>
+    <button class="btn" style="margin-top:8px" onclick="closeModal('modal-enter')">cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL: grupo criado -->
+<div class="modal-bg" id="modal-created">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title">grupo criado! 🎉</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">compartilhe este link com o grupo. só quem tiver o link consegue acessar.</p>
+    <div class="link
 
 <!-- APP -->
 <div class="app" id="main-app" style="display:none">
@@ -268,6 +296,8 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const db = getDatabase(fbApp);
 const CATS = { comida:"🍺", transporte:"🚗", hospedagem:"🏨", ingresso:"🎟", outros:"💸" };
+const brl = v => (v||0).toLocaleString("pt-BR", {minimumFractionDigits:2, maximumFractionDigits:2});
+const parseVal = id => parseFloat(document.getElementById(id).value.replace(",","."));
 
 let groupId = null, groupData = null;
 let despesas = {}, pagamentos = {};
@@ -350,7 +380,7 @@ function renderAll() {
 function renderSummary() {
   const list = Object.values(despesas);
   const total = list.reduce((s,e)=>s+(e.valor||0),0);
-  document.getElementById('sum-total').textContent = 'R$'+total.toFixed(0);
+  document.getElementById('sum-total').textContent = 'R$ '+brl(total);
   document.getElementById('sum-count').textContent = list.length;
   document.getElementById('sum-people').textContent = (groupData?.members||[]).length;
 }
@@ -360,7 +390,7 @@ function renderDespesas() {
   const list = Object.entries(despesas).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
   if (!list.length) { el.innerHTML='<div class="empty">nenhuma despesa ainda</div>'; return; }
   el.innerHTML = list.map(([id,e])=>{
-    const per = e.entre?.length ? (e.valor/e.entre.length).toFixed(2) : '—';
+    const per = e.entre?.length ? brl(e.valor/e.entre.length) : '—';
     const edited = e.editedAt ? ' · <span style="color:var(--hint)">editado</span>' : '';
     return `<div class="expense-item">
       <div class="exp-icon">${CATS[e.cat]||'💸'}</div>
@@ -373,7 +403,7 @@ function renderDespesas() {
         </div>
       </div>
       <div class="exp-right">
-        <div class="exp-valor">R$ ${(e.valor||0).toFixed(2)}</div>
+        <div class="exp-valor">R$ ${brl(e.valor)}</div>
         <div class="exp-per">R$ ${per}/pessoa</div>
       </div>
     </div>`;
@@ -403,7 +433,7 @@ function renderBalanco() {
   el.innerHTML = members.map(m=>{
     const v=bal[m]||0;
     const cls=v>0.01?'bal-positive':v<-0.01?'bal-negative':'bal-zero';
-    const lbl=v>0.01?`recebe R$ ${v.toFixed(2)}`:v<-0.01?`deve R$ ${Math.abs(v).toFixed(2)}`:'quite ✓';
+    const lbl=v>0.01?`recebe R$ ${brl(v)}`:v<-0.01?`deve R$ ${brl(Math.abs(v))}`:'quite ✓';
     return `<div class="balance-row"><div class="avatar">${m[0]}</div><span class="balance-name">${m}</span><span class="balance-val ${cls}">${lbl}</span></div>`;
   }).join('');
 }
@@ -427,14 +457,14 @@ function renderTransfers() {
   const el=document.getElementById('list-transfers');
   const t=calcTransfers();
   if(!t.length){el.innerHTML='<div class="empty">tudo quite 🎉</div>';return;}
-  el.innerHTML=t.map(x=>`<div class="transfer-item"><span class="t-from">${x.from}</span><span class="t-arrow">→</span><span class="t-to">${x.to}</span><span class="t-val">R$ ${x.amount.toFixed(2)}</span><span class="pix-tag">PIX</span></div>`).join('');
+  el.innerHTML=t.map(x=>`<div class="transfer-item"><span class="t-from">${x.from}</span><span class="t-arrow">→</span><span class="t-to">${x.to}</span><span class="t-val">R$ ${brl(x.amount)}</span><span class="pix-tag">PIX</span></div>`).join('');
 }
 
 function renderPayments() {
   const el=document.getElementById('list-payments');
   const list=Object.values(pagamentos).sort((a,b)=>(b.ts||0)-(a.ts||0));
   if(!list.length){el.innerHTML='<div class="empty">nenhum ainda</div>';return;}
-  el.innerHTML=list.map(p=>`<div class="pay-row"><span class="pay-names">${p.from} → ${p.to}</span><span class="pay-val">R$ ${(p.amount||0).toFixed(2)}</span></div>`).join('');
+  el.innerHTML=list.map(p=>`<div class="pay-row"><span class="pay-names">${p.from} → ${p.to}</span><span class="pay-val">R$ ${brl(p.amount)}</span></div>`).join('');
 }
 
 function buildForm() {
@@ -485,7 +515,7 @@ window.cancelEdit=function(){
 
 window.saveDespesa=async function(){
   const desc=document.getElementById('f-desc').value.trim();
-  const valor=parseFloat(document.getElementById('f-valor').value);
+  const valor=parseVal("f-valor");
   const pagoPor=document.getElementById('f-pagopor').value;
   const cat=document.getElementById('f-cat').value;
   if(!desc||isNaN(valor)||valor<=0||selectedChips.length===0){showToast('preencha todos os campos');return;}
@@ -512,7 +542,7 @@ window.deleteDespesa=async function(id){
 window.addPagamento=async function(){
   const from=document.getElementById('p-from').value;
   const to=document.getElementById('p-to').value;
-  const amount=parseFloat(document.getElementById('p-val').value);
+  const amount=parseVal("p-val");
   if(from===to||isNaN(amount)||amount<=0){showToast('dados inválidos');return;}
   try {
     await push(ref(db,`grupos/${groupId}/pagamentos`),{from,to,amount,ts:Date.now()});
