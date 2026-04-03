@@ -27,402 +27,154 @@
     --radius-lg: 16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 15px;
-  }
-
-  /* LAYOUT */
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
   .app { max-width: 480px; margin: 0 auto; padding: 0 0 100px; }
-  
-  /* HEADER */
-  .header {
-    padding: 28px 20px 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 24px;
-  }
-  .header-left h1 {
-    font-family: 'DM Mono', monospace;
-    font-size: 26px;
-    font-weight: 500;
-    letter-spacing: -0.5px;
-    color: var(--accent);
-  }
-  .header-left p { font-size: 13px; color: var(--muted); margin-top: 2px; }
-  .group-select {
-    background: var(--surface);
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    padding: 7px 12px;
-    cursor: pointer;
-    outline: none;
-  }
-  .group-select:focus { border-color: var(--accent); }
 
-  /* SUMMARY STRIP */
-  .summary {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    padding: 0 20px;
-    margin-bottom: 20px;
-  }
-  .summary-card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 14px;
-  }
+  .header { padding: 28px 20px 0; display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
+  .header-left h1 { font-family: 'DM Mono', monospace; font-size: 26px; font-weight: 500; letter-spacing: -0.5px; color: var(--accent); }
+  .header-left p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .group-code { font-size: 11px; color: var(--hint); font-family: 'DM Mono', monospace; }
+
+  .summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 20px; margin-bottom: 20px; }
+  .summary-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
   .summary-card .label { font-size: 11px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
   .summary-card .value { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; }
 
-  /* TABS */
-  .tabs {
-    display: flex;
-    gap: 2px;
-    padding: 0 20px;
-    margin-bottom: 20px;
-    background: var(--surface);
-    border-radius: var(--radius-lg);
-    margin: 0 20px 20px;
-    padding: 4px;
-  }
-  .tab {
-    flex: 1;
-    padding: 8px 6px;
-    border: none;
-    background: none;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all .15s;
-    white-space: nowrap;
-  }
-  .tab.active {
-    background: var(--surface2);
-    color: var(--text);
-    font-weight: 500;
-  }
+  .tabs { display: flex; gap: 2px; margin: 0 20px 20px; background: var(--surface); border-radius: var(--radius-lg); padding: 4px; }
+  .tab { flex: 1; padding: 8px 6px; border: none; background: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; border-radius: 8px; transition: all .15s; white-space: nowrap; }
+  .tab.active { background: var(--surface2); color: var(--text); font-weight: 500; }
 
-  /* SECTIONS */
   .section { display: none; padding: 0 20px; }
   .section.active { display: block; }
 
-  /* CARDS */
-  .card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-    margin-bottom: 10px;
-  }
-  .card-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--hint);
-    font-weight: 500;
-    margin-bottom: 14px;
-  }
+  .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 10px; }
+  .card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--hint); font-weight: 500; margin-bottom: 14px; }
 
-  /* EXPENSE ITEM */
-  .expense-item {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 11px 0;
-    border-bottom: 0.5px solid var(--border);
-    gap: 12px;
-  }
+  .expense-item { display: flex; align-items: flex-start; justify-content: space-between; padding: 11px 0; border-bottom: 0.5px solid var(--border); gap: 10px; }
   .expense-item:last-child { border-bottom: none; padding-bottom: 0; }
   .expense-item:first-child { padding-top: 0; }
-  .exp-icon {
-    width: 34px; height: 34px;
-    border-radius: 8px;
-    background: var(--surface2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
+  .exp-icon { width: 34px; height: 34px; border-radius: 8px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
   .exp-info { flex: 1; min-width: 0; }
-  .exp-desc { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .exp-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .exp-desc { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .exp-meta { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .exp-actions { display: flex; gap: 6px; margin-top: 6px; }
   .exp-right { text-align: right; flex-shrink: 0; }
   .exp-valor { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500; }
   .exp-per { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .badge {
-    display: inline-block;
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 20px;
-    margin-top: 3px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-  }
-  .badge-open { background: var(--green-dim); color: var(--green); }
-  .badge-paid { background: var(--surface2); color: var(--hint); }
 
-  /* BALANCE ROWS */
-  .balance-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 0.5px solid var(--border);
-  }
+  .btn-sm { font-size: 11px; padding: 3px 9px; border-radius: 6px; border: 0.5px solid var(--border2); background: none; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .12s; }
+  .btn-sm:hover { color: var(--accent); border-color: var(--accent); }
+  .btn-sm.danger:hover { color: var(--red); border-color: var(--red); }
+
+  .balance-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
   .balance-row:last-child { border-bottom: none; padding-bottom: 0; }
   .balance-row:first-child { padding-top: 0; }
-  .avatar {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: var(--surface2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 500;
-    color: var(--muted);
-    margin-right: 10px;
-    flex-shrink: 0;
-  }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--muted); margin-right: 10px; flex-shrink: 0; }
   .balance-name { font-size: 14px; flex: 1; }
   .balance-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; }
   .bal-positive { color: var(--green); }
   .bal-negative { color: var(--red); }
   .bal-zero { color: var(--hint); }
 
-  /* TRANSFER ITEMS */
-  .transfer-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    background: var(--surface2);
-    border-radius: var(--radius);
-    margin-bottom: 8px;
-    font-size: 14px;
-  }
+  .transfer-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border-radius: var(--radius); margin-bottom: 8px; font-size: 14px; }
   .transfer-item:last-child { margin-bottom: 0; }
   .t-from { font-weight: 500; }
-  .t-arrow { color: var(--hint); font-size: 12px; }
+  .t-arrow { color: var(--hint); }
   .t-to { font-weight: 500; flex: 1; }
-  .t-val { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--amber); }
-  .pix-tag {
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 20px;
-    background: var(--amber-dim);
-    color: var(--amber);
-    font-weight: 500;
-    letter-spacing: 0.04em;
-  }
+  .t-val { font-family: 'DM Mono', monospace; color: var(--amber); }
+  .pix-tag { font-size: 10px; padding: 2px 7px; border-radius: 20px; background: var(--amber-dim); color: var(--amber); font-weight: 500; }
 
-  /* FORM */
   .form-group { margin-bottom: 14px; }
   .form-group label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    background: var(--surface2);
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    padding: 10px 13px;
-    outline: none;
-    transition: border-color .15s;
-  }
-  .form-group input:focus,
-  .form-group select:focus { border-color: var(--accent); }
+  .form-group input, .form-group select { width: 100%; background: var(--surface2); border: 0.5px solid var(--border2); border-radius: var(--radius); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 10px 13px; outline: none; transition: border-color .15s; }
+  .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
   .form-group input::placeholder { color: var(--hint); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-  /* PARTICIPANTS CHIPS */
   .chips-wrap { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
-  .chip {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 13px;
-    cursor: pointer;
-    border: 0.5px solid var(--border2);
-    background: var(--surface2);
-    color: var(--muted);
-    transition: all .12s;
-    user-select: none;
-  }
-  .chip.on {
-    border-color: var(--accent);
-    background: var(--accent-dim);
-    color: var(--accent);
-  }
+  .chip { padding: 5px 12px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 0.5px solid var(--border2); background: var(--surface2); color: var(--muted); transition: all .12s; user-select: none; }
+  .chip.on { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
 
-  /* BUTTONS */
-  .btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: var(--radius);
-    border: 0.5px solid var(--border2);
-    background: var(--surface2);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all .15s;
-    margin-top: 4px;
-  }
+  .btn { width: 100%; padding: 12px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--surface2); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .15s; margin-top: 4px; }
   .btn:hover { border-color: var(--accent); color: var(--accent); }
   .btn:active { transform: scale(0.99); }
-  .btn-primary {
-    background: var(--accent);
-    color: #1a1510;
-    border-color: var(--accent);
-  }
+  .btn-primary { background: var(--accent); color: #1a1510; border-color: var(--accent); }
   .btn-primary:hover { opacity: 0.9; color: #1a1510; }
+  .btn-danger { color: var(--red); border-color: var(--red-dim); }
+  .btn-danger:hover { background: var(--red-dim); }
 
-  /* DIVIDER */
-  .divider { height: 0.5px; background: var(--border); margin: 16px 0; }
-
-  /* EMPTY */
-  .empty { text-align: center; padding: 32px 0; color: var(--hint); font-size: 14px; }
-
-  /* BOTTOM NAV */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(15,15,15,0.95);
-    backdrop-filter: blur(12px);
-    border-top: 0.5px solid var(--border);
-    display: flex;
-    padding: 8px 0 20px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-  .nav-btn {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: 6px 0;
-    border: none;
-    background: none;
-    color: var(--hint);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 10px;
-    cursor: pointer;
-    transition: color .15s;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .nav-btn.active { color: var(--accent); }
-  .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
-  /* STATUS */
-  .status-bar {
-    font-size: 12px;
-    color: var(--hint);
-    text-align: center;
-    padding: 8px 20px 0;
-    font-family: 'DM Mono', monospace;
-  }
-  .status-bar.ok { color: var(--green); }
-  .status-bar.err { color: var(--red); }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--surface2);
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius);
-    padding: 10px 18px;
-    font-size: 13px;
-    color: var(--text);
-    opacity: 0;
-    transition: all .25s;
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: 100;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  /* PAYMENT HISTORY */
-  .pay-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 9px 0;
-    border-bottom: 0.5px solid var(--border);
-    font-size: 13px;
-  }
+  .pay-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
   .pay-row:last-child { border-bottom: none; }
   .pay-row:first-child { padding-top: 0; }
   .pay-names { color: var(--muted); }
   .pay-val { font-family: 'DM Mono', monospace; color: var(--green); }
 
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .empty { text-align: center; padding: 32px 0; color: var(--hint); font-size: 14px; }
+  #status-bar { font-size: 12px; color: var(--hint); text-align: center; padding: 4px 20px 8px; font-family: 'DM Mono', monospace; min-height: 22px; }
+
+  .link-box { background: var(--surface2); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 10px 13px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); word-break: break-all; margin-bottom: 10px; cursor: pointer; }
+  .link-box:hover { border-color: var(--accent); color: var(--accent); }
+  .divider { height: 0.5px; background: var(--border); margin: 16px 0; }
+
+  .setup-screen { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 400; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; text-align: center; }
+  .setup-screen.open { display: flex; }
+  .setup-screen h2 { font-family: 'DM Mono', monospace; font-size: 28px; color: var(--accent); margin-bottom: 8px; }
+  .setup-screen p { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.7; max-width: 320px; }
+
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15,15,15,0.95); backdrop-filter: blur(12px); border-top: 0.5px solid var(--border); display: flex; padding: 8px 0 20px; max-width: 480px; margin: 0 auto; z-index: 100; }
+  .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; border: none; background: none; color: var(--hint); font-family: 'DM Sans', sans-serif; font-size: 10px; cursor: pointer; transition: color .15s; letter-spacing: 0.04em; text-transform: uppercase; }
+  .nav-btn.active { color: var(--accent); }
+  .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 10px 18px; font-size: 13px; color: var(--text); opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; z-index: 300; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
   .section.active > * { animation: fadeIn .2s ease; }
 </style>
 </head>
 <body>
 
-<div class="app">
+<!-- SETUP -->
+<div class="setup-screen" id="setup-screen">
+  <h2>racha/</h2>
+  <p>Para acessar um grupo use o link compartilhado. Para começar um grupo novo, clique abaixo.</p>
+  <button class="btn btn-primary" style="max-width:320px;margin-bottom:10px" onclick="createGroup()">criar novo grupo</button>
+  <button class="btn" style="max-width:320px" onclick="enterCode()">entrar com link ou código</button>
+</div>
+
+<!-- APP -->
+<div class="app" id="main-app" style="display:none">
   <div class="header">
     <div class="header-left">
       <h1>racha/</h1>
-      <p id="group-label">carregando...</p>
+      <p id="group-label">—</p>
     </div>
-    <select class="group-select" id="group-select" onchange="switchGroup(this.value)">
-      <option value="os_inconsequentes">Os Inconsequentes</option>
-      <option value="familia">Família</option>
-      <option value="trabalho">Trabalho</option>
-    </select>
+    <div class="group-code" id="group-code-display"></div>
   </div>
 
-  <div id="status-bar" class="status-bar">conectando...</div>
+  <div id="status-bar"></div>
 
-  <div class="summary" id="summary">
-    <div class="summary-card">
-      <div class="label">total</div>
-      <div class="value" id="sum-total">R$0</div>
-    </div>
-    <div class="summary-card">
-      <div class="label">despesas</div>
-      <div class="value" id="sum-count">0</div>
-    </div>
-    <div class="summary-card">
-      <div class="label">pessoas</div>
-      <div class="value" id="sum-people">0</div>
-    </div>
+  <div class="summary">
+    <div class="summary-card"><div class="label">total</div><div class="value" id="sum-total">R$0</div></div>
+    <div class="summary-card"><div class="label">despesas</div><div class="value" id="sum-count">0</div></div>
+    <div class="summary-card"><div class="label">pessoas</div><div class="value" id="sum-people">0</div></div>
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('despesas', this)">Despesas</button>
-    <button class="tab" onclick="switchTab('balanco', this)">Balanço</button>
-    <button class="tab" onclick="switchTab('pix', this)">PIX</button>
-    <button class="tab" onclick="switchTab('adicionar', this)">+ Nova</button>
+    <button class="tab active" onclick="switchTab('despesas',this)">Despesas</button>
+    <button class="tab" onclick="switchTab('balanco',this)">Balanço</button>
+    <button class="tab" onclick="switchTab('pix',this)">PIX</button>
+    <button class="tab" onclick="switchTab('adicionar',this)">+ Nova</button>
   </div>
 
-  <!-- DESPESAS -->
   <div id="sec-despesas" class="section active">
     <div class="card">
-      <div class="card-title">despesas abertas</div>
+      <div class="card-title">despesas</div>
       <div id="list-despesas"><div class="empty">nenhuma despesa ainda</div></div>
     </div>
   </div>
 
-  <!-- BALANÇO -->
   <div id="sec-balanco" class="section">
     <div class="card">
       <div class="card-title">posição de cada um</div>
@@ -430,34 +182,34 @@
     </div>
   </div>
 
-  <!-- PIX / TRANSFERÊNCIAS -->
   <div id="sec-pix" class="section">
     <div class="card" style="margin-bottom:10px">
       <div class="card-title">transferências sugeridas</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5">menor número de PIX possível para todo mundo ficar quite</p>
       <div id="list-transfers"><div class="empty">tudo quite 🎉</div></div>
     </div>
-    <div class="card">
-      <div class="card-title">pagamentos registrados</div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">pagamentos já realizados</div>
       <div id="list-payments"><div class="empty">nenhum ainda</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">registrar pagamento realizado</div>
+      <div class="form-row">
+        <div class="form-group"><label>quem pagou</label><select id="p-from"></select></div>
+        <div class="form-group"><label>para quem</label><select id="p-to"></select></div>
+      </div>
+      <div class="form-group"><label>valor R$</label><input type="number" id="p-val" placeholder="0,00" min="0" step="0.01" inputmode="decimal"/></div>
+      <button class="btn" onclick="addPagamento()">registrar pagamento</button>
     </div>
   </div>
 
-  <!-- ADICIONAR -->
   <div id="sec-adicionar" class="section">
-    <div class="card" style="margin-bottom:10px">
-      <div class="card-title">nova despesa</div>
-
-      <div class="form-group">
-        <label>descrição</label>
-        <input type="text" id="f-desc" placeholder="ex: almoço pré-prova" />
-      </div>
+    <div class="card">
+      <div class="card-title" id="form-title">nova despesa</div>
+      <div class="form-group"><label>descrição</label><input type="text" id="f-desc" placeholder="ex: almoço pré-prova"/></div>
       <div class="form-row">
-        <div class="form-group">
-          <label>valor R$</label>
-          <input type="number" id="f-valor" placeholder="0,00" min="0" step="0.01" inputmode="decimal" />
-        </div>
-        <div class="form-group">
-          <label>categoria</label>
+        <div class="form-group"><label>valor R$</label><input type="number" id="f-valor" placeholder="0,00" min="0" step="0.01" inputmode="decimal"/></div>
+        <div class="form-group"><label>categoria</label>
           <select id="f-cat">
             <option value="comida">🍺 comida</option>
             <option value="transporte">🚗 transporte</option>
@@ -467,56 +219,33 @@
           </select>
         </div>
       </div>
-      <div class="form-group">
-        <label>pago por</label>
-        <select id="f-pagopor"></select>
-      </div>
-      <div class="form-group">
-        <label>dividir entre</label>
-        <div class="chips-wrap" id="f-chips"></div>
-      </div>
-
-      <button class="btn btn-primary" onclick="addDespesa()">salvar despesa</button>
+      <div class="form-group"><label>pago por</label><select id="f-pagopor"></select></div>
+      <div class="form-group"><label>dividir entre</label><div class="chips-wrap" id="f-chips"></div></div>
+      <button class="btn btn-primary" id="btn-save" onclick="saveDespesa()">salvar despesa</button>
+      <button class="btn btn-danger" id="btn-cancel" style="display:none;margin-top:8px" onclick="cancelEdit()">cancelar edição</button>
     </div>
-
+    <div class="divider"></div>
     <div class="card">
-      <div class="card-title">registrar pagamento</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>quem pagou</label>
-          <select id="p-from"></select>
-        </div>
-        <div class="form-group">
-          <label>para quem</label>
-          <select id="p-to"></select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>valor R$</label>
-        <input type="number" id="p-val" placeholder="0,00" min="0" step="0.01" inputmode="decimal" />
-      </div>
-      <button class="btn" onclick="addPagamento()">registrar pagamento</button>
+      <div class="card-title">link do grupo</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:10px">compartilhe com o grupo. só quem tiver o link acessa.</p>
+      <div class="link-box" id="group-link" onclick="copyLink()">—</div>
+      <button class="btn" onclick="copyLink()">copiar link</button>
     </div>
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <button class="nav-btn active" id="nav-despesas" onclick="switchTab('despesas',null,this)">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="16" x2="12" y2="16"/></svg>
-    lista
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="16" x2="12" y2="16"/></svg>lista
   </button>
   <button class="nav-btn" id="nav-balanco" onclick="switchTab('balanco',null,this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-    balanço
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>balanço
   </button>
   <button class="nav-btn" id="nav-pix" onclick="switchTab('pix',null,this)">
-    <svg viewBox="0 0 24 24"><polyline points="5 12 12 5 19 12"/><polyline points="5 12 12 19 19 12"/></svg>
-    pix
+    <svg viewBox="0 0 24 24"><polyline points="22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>pix
   </button>
   <button class="nav-btn" id="nav-adicionar" onclick="switchTab('adicionar',null,this)">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    nova
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>nova
   </button>
 </div>
 
@@ -524,7 +253,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
+import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAfdoXt9F1Px847cIybjYk31cGFFoXAWrA",
@@ -536,106 +265,112 @@ const firebaseConfig = {
   appId: "1:321467435840:web:72f1bd911f56d85f7088a5"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-const GROUPS = {
-  os_inconsequentes: { label: "Os Inconsequentes", members: ["Elton","Carol","Rafael","Bia","Thiago"] },
-  familia:           { label: "Família",            members: ["Elton","Pai","Mãe","Irmã"] },
-  trabalho:          { label: "Trabalho",           members: ["Elton","Felipe","Juliana","André"] }
-};
-
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp);
 const CATS = { comida:"🍺", transporte:"🚗", hospedagem:"🏨", ingresso:"🎟", outros:"💸" };
 
-let currentGroup = "os_inconsequentes";
-let despesas = {};
-let pagamentos = {};
-let unsubDespesas = null;
-let unsubPagamentos = null;
+let groupId = null, groupData = null;
+let despesas = {}, pagamentos = {};
+let unsubD = null, unsubP = null;
 let selectedChips = [];
+let editingId = null;
 
-// ─── NAVIGATION ───────────────────────────────────────────────
+function init() {
+  const g = new URLSearchParams(location.search).get('g');
+  if (g) { loadGroup(g); }
+  else {
+    document.getElementById('setup-screen').classList.add('open');
+    document.getElementById('main-app').style.display = 'none';
+  }
+}
+
+function loadGroup(id) {
+  groupId = id;
+  document.getElementById('setup-screen').classList.remove('open');
+  document.getElementById('main-app').style.display = '';
+  setStatus('conectando...');
+
+  onValue(ref(db, `grupos/${id}/info`), snap => {
+    groupData = snap.val();
+    if (!groupData) { setStatus('grupo não encontrado', true); return; }
+    document.getElementById('group-label').textContent = groupData.name;
+    document.getElementById('group-code-display').textContent = `#${id.slice(0,6)}`;
+    document.getElementById('group-link').textContent = `${location.origin}${location.pathname}?g=${id}`;
+    buildForm();
+    setStatus('');
+  }, err => setStatus('erro: ' + err.message, true));
+
+  if (unsubD) unsubD();
+  if (unsubP) unsubP();
+  unsubD = onValue(ref(db, `grupos/${id}/despesas`), snap => { despesas = snap.val()||{}; renderAll(); });
+  unsubP = onValue(ref(db, `grupos/${id}/pagamentos`), snap => { pagamentos = snap.val()||{}; renderAll(); });
+}
+
+window.createGroup = async function() {
+  const name = prompt('Nome do grupo:');
+  if (!name?.trim()) return;
+  const raw = prompt('Membros (separados por vírgula):\nExemplo: Elton, Carol, Rafael, Bia, Thiago');
+  if (!raw) return;
+  const members = raw.split(',').map(m=>m.trim()).filter(Boolean);
+  if (members.length < 2) { alert('Adicione pelo menos 2 membros.'); return; }
+  const id = Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,6);
+  await set(ref(db, `grupos/${id}/info`), { name: name.trim(), members, createdAt: Date.now() });
+  const link = `${location.origin}${location.pathname}?g=${id}`;
+  alert(`Grupo criado! 🎉\n\nLink do grupo:\n${link}\n\nGuarde este link — é a única forma de acessar.`);
+  location.href = link;
+};
+
+window.enterCode = function() {
+  const input = prompt('Cole o link ou código do grupo:');
+  if (!input) return;
+  const match = input.match(/[?&]g=([a-z0-9]+)/i);
+  if (match) { location.href = `${location.origin}${location.pathname}?g=${match[1]}`; }
+  else if (/^[a-z0-9]{8,}$/i.test(input.trim())) { location.href = `${location.origin}${location.pathname}?g=${input.trim()}`; }
+  else { alert('Link ou código inválido.'); }
+};
+
 window.switchTab = function(name, tabEl, navEl) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
-  document.getElementById('sec-' + name).classList.add('active');
-  if (tabEl) tabEl.classList.add('active');
-  if (navEl) navEl.classList.add('active');
-  const tabMap = { despesas:0, balanco:1, pix:2, adicionar:3 };
-  document.querySelectorAll('.tab')[tabMap[name]]?.classList.add('active');
-  document.getElementById('nav-' + name)?.classList.add('active');
-  if (name === 'adicionar') buildForm();
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(n=>n.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  const map = {despesas:0,balanco:1,pix:2,adicionar:3};
+  document.querySelectorAll('.tab')[map[name]]?.classList.add('active');
+  document.getElementById('nav-'+name)?.classList.add('active');
   renderAll();
 };
 
-// ─── GROUP SWITCH ──────────────────────────────────────────────
-window.switchGroup = function(g) {
-  currentGroup = g;
-  despesas = {}; pagamentos = {};
-  document.getElementById('group-label').textContent = GROUPS[g].label;
-  if (unsubDespesas) unsubDespesas();
-  if (unsubPagamentos) unsubPagamentos();
-  listenDespesas();
-  listenPagamentos();
-  buildForm();
-};
-
-// ─── FIREBASE LISTENERS ────────────────────────────────────────
-function listenDespesas() {
-  const r = ref(db, `grupos/${currentGroup}/despesas`);
-  unsubDespesas = onValue(r, snap => {
-    despesas = snap.val() || {};
-    renderAll();
-    setStatus('online');
-  }, err => { setStatus('erro: ' + err.message, true); });
-}
-
-function listenPagamentos() {
-  const r = ref(db, `grupos/${currentGroup}/pagamentos`);
-  unsubPagamentos = onValue(r, snap => {
-    pagamentos = snap.val() || {};
-    renderAll();
-  });
-}
-
-// ─── STATUS ────────────────────────────────────────────────────
-function setStatus(msg, err) {
-  const el = document.getElementById('status-bar');
-  el.textContent = msg === 'online' ? '' : msg;
-  el.className = 'status-bar' + (err ? ' err' : ' ok');
-}
-
-// ─── RENDER ────────────────────────────────────────────────────
 function renderAll() {
-  renderSummary();
-  renderDespesas();
-  renderBalanco();
-  renderTransfers();
-  renderPayments();
+  renderSummary(); renderDespesas(); renderBalanco(); renderTransfers(); renderPayments();
+  const members = groupData?.members||[];
+  const opts = members.map(m=>`<option>${m}</option>`).join('');
+  ['p-from','p-to'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=opts; });
 }
 
 function renderSummary() {
-  const list = Object.values(despesas).filter(e => !e.paid);
-  const total = list.reduce((s,e) => s + (e.valor||0), 0);
-  const members = new Set(list.flatMap(e => e.entre||[]));
-  document.getElementById('sum-total').textContent = 'R$' + total.toFixed(0);
+  const list = Object.values(despesas);
+  const total = list.reduce((s,e)=>s+(e.valor||0),0);
+  document.getElementById('sum-total').textContent = 'R$'+total.toFixed(0);
   document.getElementById('sum-count').textContent = list.length;
-  document.getElementById('sum-people').textContent = members.size || GROUPS[currentGroup].members.length;
+  document.getElementById('sum-people').textContent = (groupData?.members||[]).length;
 }
 
 function renderDespesas() {
   const el = document.getElementById('list-despesas');
-  const list = Object.entries(despesas).sort((a,b) => (b[1].ts||0)-(a[1].ts||0));
-  if (!list.length) { el.innerHTML = '<div class="empty">nenhuma despesa ainda</div>'; return; }
-  el.innerHTML = list.map(([id,e]) => {
+  const list = Object.entries(despesas).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
+  if (!list.length) { el.innerHTML='<div class="empty">nenhuma despesa ainda</div>'; return; }
+  el.innerHTML = list.map(([id,e])=>{
     const per = e.entre?.length ? (e.valor/e.entre.length).toFixed(2) : '—';
+    const edited = e.editedAt ? ' · <span style="color:var(--hint)">editado</span>' : '';
     return `<div class="expense-item">
       <div class="exp-icon">${CATS[e.cat]||'💸'}</div>
       <div class="exp-info">
         <div class="exp-desc">${e.desc}</div>
-        <div class="exp-meta">pago por ${e.pagoPor} · ${(e.entre||[]).length} pessoas</div>
-        <span class="badge ${e.paid?'badge-paid':'badge-open'}">${e.paid?'quitado':'aberto'}</span>
+        <div class="exp-meta">pago por ${e.pagoPor}${edited}<br>${(e.entre||[]).join(' · ')}</div>
+        <div class="exp-actions">
+          <button class="btn-sm" onclick="editDespesa('${id}')">editar</button>
+          <button class="btn-sm danger" onclick="deleteDespesa('${id}')">excluir</button>
+        </div>
       </div>
       <div class="exp-right">
         <div class="exp-valor">R$ ${(e.valor||0).toFixed(2)}</div>
@@ -645,101 +380,76 @@ function renderDespesas() {
   }).join('');
 }
 
-function calcBalances() {
-  const members = GROUPS[currentGroup].members;
-  const bal = {};
-  members.forEach(m => bal[m] = 0);
-  Object.values(despesas).filter(e=>!e.paid).forEach(e => {
-    const share = (e.valor||0) / (e.entre?.length||1);
-    bal[e.pagoPor] = (bal[e.pagoPor]||0) + (e.valor||0);
-    (e.entre||[]).forEach(p => { bal[p] = (bal[p]||0) - share; });
+function calcBal() {
+  const members = groupData?.members||[];
+  const bal = {}; members.forEach(m=>bal[m]=0);
+  Object.values(despesas).forEach(e=>{
+    const share=(e.valor||0)/(e.entre?.length||1);
+    if(bal[e.pagoPor]!==undefined) bal[e.pagoPor]+=(e.valor||0);
+    (e.entre||[]).forEach(p=>{ if(bal[p]!==undefined) bal[p]-=share; });
   });
-  Object.values(pagamentos).forEach(p => {
-    bal[p.from] = (bal[p.from]||0) - (p.amount||0);
-    bal[p.to]   = (bal[p.to]||0)   + (p.amount||0);
+  Object.values(pagamentos).forEach(p=>{
+    if(bal[p.from]!==undefined) bal[p.from]-=(p.amount||0);
+    if(bal[p.to]!==undefined)   bal[p.to]+=(p.amount||0);
   });
   return bal;
 }
 
 function renderBalanco() {
   const el = document.getElementById('list-balanco');
-  const bal = calcBalances();
-  const members = GROUPS[currentGroup].members;
-  el.innerHTML = members.map(m => {
-    const v = bal[m]||0;
-    const cls = v > 0.01 ? 'bal-positive' : v < -0.01 ? 'bal-negative' : 'bal-zero';
-    const label = v > 0.01 ? `recebe R$ ${v.toFixed(2)}` : v < -0.01 ? `deve R$ ${Math.abs(v).toFixed(2)}` : 'quite';
-    return `<div class="balance-row">
-      <div class="avatar">${m[0]}</div>
-      <span class="balance-name">${m}</span>
-      <span class="balance-val ${cls}">${label}</span>
-    </div>`;
+  const bal = calcBal();
+  const members = groupData?.members||[];
+  if (!members.length) { el.innerHTML='<div class="empty">sem membros</div>'; return; }
+  el.innerHTML = members.map(m=>{
+    const v=bal[m]||0;
+    const cls=v>0.01?'bal-positive':v<-0.01?'bal-negative':'bal-zero';
+    const lbl=v>0.01?`recebe R$ ${v.toFixed(2)}`:v<-0.01?`deve R$ ${Math.abs(v).toFixed(2)}`:'quite ✓';
+    return `<div class="balance-row"><div class="avatar">${m[0]}</div><span class="balance-name">${m}</span><span class="balance-val ${cls}">${lbl}</span></div>`;
   }).join('');
 }
 
 function calcTransfers() {
-  const bal = calcBalances();
-  const debtors   = Object.entries(bal).filter(([,v])=>v<-0.01).map(([k,v])=>({name:k,amount:-v})).sort((a,b)=>b.amount-a.amount);
-  const creditors = Object.entries(bal).filter(([,v])=>v> 0.01).map(([k,v])=>({name:k,amount: v})).sort((a,b)=>b.amount-a.amount);
-  const transfers = [];
-  const d = debtors.map(x=>({...x}));
-  const c = creditors.map(x=>({...x}));
+  const bal=calcBal();
+  const d=Object.entries(bal).filter(([,v])=>v<-0.01).map(([k,v])=>({name:k,amount:-v})).sort((a,b)=>b.amount-a.amount);
+  const c=Object.entries(bal).filter(([,v])=>v>0.01).map(([k,v])=>({name:k,amount:v})).sort((a,b)=>b.amount-a.amount);
+  const out=[]; const dd=d.map(x=>({...x})); const cc=c.map(x=>({...x}));
   let i=0,j=0;
-  while(i<d.length && j<c.length) {
-    const amt = Math.min(d[i].amount, c[j].amount);
-    if(amt>0.01) transfers.push({from:d[i].name, to:c[j].name, amount:amt});
-    d[i].amount-=amt; c[j].amount-=amt;
-    if(d[i].amount<0.01) i++;
-    if(c[j].amount<0.01) j++;
+  while(i<dd.length&&j<cc.length){
+    const amt=Math.min(dd[i].amount,cc[j].amount);
+    if(amt>0.01) out.push({from:dd[i].name,to:cc[j].name,amount:amt});
+    dd[i].amount-=amt; cc[j].amount-=amt;
+    if(dd[i].amount<0.01)i++; if(cc[j].amount<0.01)j++;
   }
-  return transfers;
+  return out;
 }
 
 function renderTransfers() {
-  const el = document.getElementById('list-transfers');
-  const transfers = calcTransfers();
-  if(!transfers.length) { el.innerHTML = '<div class="empty">tudo quite 🎉</div>'; return; }
-  el.innerHTML = transfers.map(t=>`
-    <div class="transfer-item">
-      <span class="t-from">${t.from}</span>
-      <span class="t-arrow">→</span>
-      <span class="t-to">${t.to}</span>
-      <span class="t-val">R$ ${t.amount.toFixed(2)}</span>
-      <span class="pix-tag">PIX</span>
-    </div>`).join('');
+  const el=document.getElementById('list-transfers');
+  const t=calcTransfers();
+  if(!t.length){el.innerHTML='<div class="empty">tudo quite 🎉</div>';return;}
+  el.innerHTML=t.map(x=>`<div class="transfer-item"><span class="t-from">${x.from}</span><span class="t-arrow">→</span><span class="t-to">${x.to}</span><span class="t-val">R$ ${x.amount.toFixed(2)}</span><span class="pix-tag">PIX</span></div>`).join('');
 }
 
 function renderPayments() {
-  const el = document.getElementById('list-payments');
-  const list = Object.values(pagamentos).sort((a,b)=>(b.ts||0)-(a.ts||0));
-  if(!list.length) { el.innerHTML = '<div class="empty">nenhum ainda</div>'; return; }
-  el.innerHTML = list.map(p=>`
-    <div class="pay-row">
-      <span class="pay-names">${p.from} → ${p.to}</span>
-      <span class="pay-val">R$ ${(p.amount||0).toFixed(2)}</span>
-    </div>`).join('');
+  const el=document.getElementById('list-payments');
+  const list=Object.values(pagamentos).sort((a,b)=>(b.ts||0)-(a.ts||0));
+  if(!list.length){el.innerHTML='<div class="empty">nenhum ainda</div>';return;}
+  el.innerHTML=list.map(p=>`<div class="pay-row"><span class="pay-names">${p.from} → ${p.to}</span><span class="pay-val">R$ ${(p.amount||0).toFixed(2)}</span></div>`).join('');
 }
 
-// ─── FORM ──────────────────────────────────────────────────────
 function buildForm() {
-  const members = GROUPS[currentGroup].members;
-  selectedChips = [...members];
-  const ppEl = document.getElementById('f-pagopor');
-  const pfEl = document.getElementById('p-from');
-  const ptEl = document.getElementById('p-to');
-  const opts = members.map(m=>`<option>${m}</option>`).join('');
-  if(ppEl) ppEl.innerHTML = opts;
-  if(pfEl) pfEl.innerHTML = opts;
-  if(ptEl) ptEl.innerHTML = opts;
-  const chipsEl = document.getElementById('f-chips');
-  if(chipsEl) chipsEl.innerHTML = members.map(m=>`
-    <span class="chip on" id="chip-${m}" onclick="toggleChip('${m}')">${m}</span>`).join('');
+  const members=groupData?.members||[];
+  selectedChips=[...members];
+  const opts=members.map(m=>`<option>${m}</option>`).join('');
+  const pp=document.getElementById('f-pagopor'); if(pp) pp.innerHTML=opts;
+  const chips=document.getElementById('f-chips');
+  if(chips) chips.innerHTML=members.map(m=>`<span class="chip on" id="chip-${m}" onclick="toggleChip('${m}')">${m}</span>`).join('');
 }
 
-window.toggleChip = function(name) {
-  if(selectedChips.includes(name)) {
-    if(selectedChips.length<=1) return;
-    selectedChips = selectedChips.filter(p=>p!==name);
+window.toggleChip=function(name){
+  if(selectedChips.includes(name)){
+    if(selectedChips.length<=1)return;
+    selectedChips=selectedChips.filter(p=>p!==name);
     document.getElementById('chip-'+name)?.classList.remove('on');
   } else {
     selectedChips.push(name);
@@ -747,53 +457,87 @@ window.toggleChip = function(name) {
   }
 };
 
-// ─── ADD DESPESA ───────────────────────────────────────────────
-window.addDespesa = async function() {
-  const desc   = document.getElementById('f-desc').value.trim();
-  const valor  = parseFloat(document.getElementById('f-valor').value);
-  const pagoPor= document.getElementById('f-pagopor').value;
-  const cat    = document.getElementById('f-cat').value;
-  if(!desc || isNaN(valor) || valor<=0 || selectedChips.length===0) {
-    showToast('preencha todos os campos'); return;
-  }
+window.editDespesa=function(id){
+  const e=despesas[id]; if(!e)return;
+  editingId=id;
+  switchTab('adicionar');
+  document.getElementById('form-title').textContent='editar despesa';
+  document.getElementById('f-desc').value=e.desc;
+  document.getElementById('f-valor').value=e.valor;
+  document.getElementById('f-cat').value=e.cat;
+  document.getElementById('f-pagopor').value=e.pagoPor;
+  document.getElementById('btn-save').textContent='salvar alterações';
+  document.getElementById('btn-cancel').style.display='';
+  const members=groupData?.members||[];
+  selectedChips=[...(e.entre||[])];
+  members.forEach(m=>{ document.getElementById('chip-'+m)?.classList.toggle('on',selectedChips.includes(m)); });
+};
+
+window.cancelEdit=function(){
+  editingId=null;
+  document.getElementById('form-title').textContent='nova despesa';
+  document.getElementById('f-desc').value='';
+  document.getElementById('f-valor').value='';
+  document.getElementById('btn-save').textContent='salvar despesa';
+  document.getElementById('btn-cancel').style.display='none';
+  buildForm();
+};
+
+window.saveDespesa=async function(){
+  const desc=document.getElementById('f-desc').value.trim();
+  const valor=parseFloat(document.getElementById('f-valor').value);
+  const pagoPor=document.getElementById('f-pagopor').value;
+  const cat=document.getElementById('f-cat').value;
+  if(!desc||isNaN(valor)||valor<=0||selectedChips.length===0){showToast('preencha todos os campos');return;}
   try {
-    const r = ref(db, `grupos/${currentGroup}/despesas`);
-    await push(r, { desc, valor, pagoPor, entre: selectedChips, cat, paid: false, ts: Date.now() });
-    document.getElementById('f-desc').value = '';
-    document.getElementById('f-valor').value = '';
-    showToast('despesa salva ✓');
+    if(editingId){
+      await update(ref(db,`grupos/${groupId}/despesas/${editingId}`),{desc,valor,pagoPor,entre:selectedChips,cat,editedAt:Date.now()});
+      showToast('despesa atualizada ✓'); cancelEdit();
+    } else {
+      await push(ref(db,`grupos/${groupId}/despesas`),{desc,valor,pagoPor,entre:selectedChips,cat,ts:Date.now()});
+      document.getElementById('f-desc').value='';
+      document.getElementById('f-valor').value='';
+      showToast('despesa salva ✓');
+    }
     switchTab('despesas');
-  } catch(e) { showToast('erro: '+e.message); }
+  } catch(e){showToast('erro: '+e.message);}
 };
 
-// ─── ADD PAGAMENTO ─────────────────────────────────────────────
-window.addPagamento = async function() {
-  const from   = document.getElementById('p-from').value;
-  const to     = document.getElementById('p-to').value;
-  const amount = parseFloat(document.getElementById('p-val').value);
-  if(from===to || isNaN(amount) || amount<=0) { showToast('dados inválidos'); return; }
+window.deleteDespesa=async function(id){
+  if(!confirm(`Excluir "${despesas[id]?.desc}"?`))return;
+  try { await remove(ref(db,`grupos/${groupId}/despesas/${id}`)); showToast('excluída'); }
+  catch(e){showToast('erro: '+e.message);}
+};
+
+window.addPagamento=async function(){
+  const from=document.getElementById('p-from').value;
+  const to=document.getElementById('p-to').value;
+  const amount=parseFloat(document.getElementById('p-val').value);
+  if(from===to||isNaN(amount)||amount<=0){showToast('dados inválidos');return;}
   try {
-    const r = ref(db, `grupos/${currentGroup}/pagamentos`);
-    await push(r, { from, to, amount, ts: Date.now() });
-    document.getElementById('p-val').value = '';
+    await push(ref(db,`grupos/${groupId}/pagamentos`),{from,to,amount,ts:Date.now()});
+    document.getElementById('p-val').value='';
     showToast('pagamento registrado ✓');
-    switchTab('pix');
-  } catch(e) { showToast('erro: '+e.message); }
+  } catch(e){showToast('erro: '+e.message);}
 };
 
-// ─── TOAST ─────────────────────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2500);
+window.copyLink=function(){
+  const link=`${location.origin}${location.pathname}?g=${groupId}`;
+  navigator.clipboard.writeText(link).then(()=>showToast('link copiado ✓')).catch(()=>showToast(link));
+};
+
+function setStatus(msg,err){
+  const el=document.getElementById('status-bar');
+  el.textContent=msg; el.style.color=err?'var(--red)':'var(--hint)';
 }
 
-// ─── INIT ──────────────────────────────────────────────────────
-document.getElementById('group-label').textContent = GROUPS[currentGroup].label;
-listenDespesas();
-listenPagamentos();
-buildForm();
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+init();
 </script>
 </body>
 </html>
