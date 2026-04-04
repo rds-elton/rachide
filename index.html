@@ -332,6 +332,7 @@ const db = getDatabase(fbApp);
 const CATS = { comida:"🍺", transporte:"🚗", hospedagem:"🏨", ingresso:"🎟", outros:"💸" };
 const brl = v => (v||0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 const parseVal = id => parseFloat(document.getElementById(id).value.replace(',','.'));
+const fmtDate = ts => ts ? new Date(ts).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'}) : '';
 
 let groupId = null, groupData = null;
 let despesas = {}, pagamentos = {};
@@ -472,7 +473,7 @@ function renderDespesas() {
       <div class="exp-icon">${CATS[e.cat]||'💸'}</div>
       <div class="exp-info">
         <div class="exp-desc">${e.desc}</div>
-        <div class="exp-meta">pago por ${e.pagoPor}${edited}<br>${(e.entre||[]).join(' · ')}</div>
+        <div class="exp-meta">${fmtDate(e.ts)} · pago por ${e.pagoPor}${edited}<br>${(e.entre||[]).join(' · ')}</div>
         <div class="exp-actions">
           <button class="btn-sm" onclick="editDespesa('${id}')">editar</button>
           <button class="btn-sm danger" onclick="deleteDespesa('${id}')">excluir</button>
