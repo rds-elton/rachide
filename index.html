@@ -264,6 +264,7 @@
     <div class="card">
       <div class="card-title" id="form-title">nova despesa</div>
       <div class="form-group"><label>descrição</label><input type="text" id="f-desc" placeholder="ex: almoço pré-prova"/></div>
+      <div class="form-group"><label>data da despesa</label><input type="date" id="f-data"/></div>
       <div class="form-row">
         <div class="form-group">
           <label>valor R$</label>
@@ -332,7 +333,14 @@ const db = getDatabase(fbApp);
 const CATS = { comida:"🍺", transporte:"🚗", hospedagem:"🏨", ingresso:"🎟", outros:"💸" };
 const brl = v => (v||0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 const parseVal = id => parseFloat(document.getElementById(id).value.replace(',','.'));
-const fmtDate = ts => ts ? new Date(ts).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'}) : '';
+const fmtDate = v => {
+  if (!v) return '';
+  if (typeof v === 'string' && v.includes('-')) {
+    const [y,m,d] = v.split('-');
+    return `${d}/${m}/${y}`;
+  }
+  return new Date(v).toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
+};
 
 let groupId = null, groupData = null;
 let despesas = {}, pagamentos = {};
@@ -473,7 +481,7 @@ function renderDespesas() {
       <div class="exp-icon">${CATS[e.cat]||'💸'}</div>
       <div class="exp-info">
         <div class="exp-desc">${e.desc}</div>
-        <div class="exp-meta">${fmtDate(e.ts)} · pago por ${e.pagoPor}${edited}<br>${(e.entre||[]).join(' · ')}</div>
+        <div class="exp-meta">${fmtDate(e.data||e.ts)} · pago por ${e.pagoPor}${edited}<br>${(e.entre||[]).join(' · ')}</div>
         <div class="exp-actions">
           <button class="btn-sm" onclick="editDespesa('${id}')">editar</button>
           <button class="btn-sm danger" onclick="deleteDespesa('${id}')">excluir</button>
@@ -565,6 +573,8 @@ function buildForm() {
   selectedChips = [...members];
   const opts = members.map(m=>`<option>${m}</option>`).join('');
   const pp = document.getElementById('f-pagopor'); if(pp) pp.innerHTML=opts;
+  const fd = document.getElementById('f-data');
+  if(fd && !fd.value) fd.value = new Date().toISOString().slice(0,10);
   const chips = document.getElementById('f-chips');
   if(chips) chips.innerHTML = members.map(m=>`
     <span class="chip on" id="chip-${m}" onclick="toggleChip('${m}')">${m}</span>`).join('');
@@ -589,6 +599,7 @@ window.editDespesa = function(id) {
   document.getElementById('form-title').textContent = 'editar despesa';
   document.getElementById('f-desc').value = e.desc;
   document.getElementById('f-valor').value = String(e.valor).replace('.',',');
+  if(e.data) document.getElementById('f-data').value = e.data;
   document.getElementById('f-cat').value = e.cat;
   document.getElementById('f-pagopor').value = e.pagoPor;
   document.getElementById('btn-save').textContent = 'salvar alterações';
@@ -603,6 +614,7 @@ window.cancelEdit = function() {
   document.getElementById('form-title').textContent = 'nova despesa';
   document.getElementById('f-desc').value = '';
   document.getElementById('f-valor').value = '';
+  document.getElementById('f-data').value = new Date().toISOString().slice(0,10);
   document.getElementById('btn-save').textContent = 'salvar despesa';
   document.getElementById('btn-cancel').style.display = 'none';
   buildForm();
@@ -612,16 +624,17 @@ window.cancelEdit = function() {
 window.saveDespesa = async function() {
   const desc    = document.getElementById('f-desc').value.trim();
   const valor   = parseVal('f-valor');
+  const data    = document.getElementById('f-data').value;
   const pagoPor = document.getElementById('f-pagopor').value;
   const cat     = document.getElementById('f-cat').value;
   if (!desc || isNaN(valor) || valor<=0 || selectedChips.length===0) { showToast('preencha todos os campos'); return; }
   try {
     if (editingId) {
-      await update(ref(db,`grupos/${groupId}/despesas/${editingId}`), {desc,valor,pagoPor,entre:selectedChips,cat,editedAt:Date.now()});
+      await update(ref(db,`grupos/${groupId}/despesas/${editingId}`), {desc,valor,data,pagoPor,entre:selectedChips,cat,editedAt:Date.now()});
       showToast('despesa atualizada ✓');
       cancelEdit();
     } else {
-      await push(ref(db,`grupos/${groupId}/despesas`), {desc,valor,pagoPor,entre:selectedChips,cat,ts:Date.now()});
+      await push(ref(db,`grupos/${groupId}/despesas`), {desc,valor,data,pagoPor,entre:selectedChips,cat,ts:Date.now()});
       document.getElementById('f-desc').value='';
       document.getElementById('f-valor').value='';
       showToast('despesa salva ✓');
