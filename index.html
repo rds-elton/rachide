@@ -116,17 +116,25 @@
   .link-box:hover { border-color: var(--accent); color: var(--accent); }
   .divider { height: 0.5px; background: var(--border); margin: 16px 0; }
 
+  /* SETUP */
   .setup-screen { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 400; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; text-align: center; }
   .setup-screen.open { display: flex; }
   .setup-screen h2 { font-family: 'DM Mono', monospace; font-size: 28px; color: var(--accent); margin-bottom: 8px; }
   .setup-screen p { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.7; max-width: 320px; }
 
+  /* MODAL */
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 500; align-items: flex-end; justify-content: center; }
+  .modal-bg.open { display: flex; }
+  .modal-box { background: var(--surface); border: 0.5px solid var(--border2); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 24px 20px 40px; width: 100%; max-width: 480px; }
+  .modal-title { font-family: 'DM Mono', monospace; font-size: 16px; color: var(--accent); margin-bottom: 20px; font-weight: 500; }
+
+  /* BOTTOM NAV */
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15,15,15,0.95); backdrop-filter: blur(12px); border-top: 0.5px solid var(--border); display: flex; padding: 8px 0 20px; max-width: 480px; margin: 0 auto; z-index: 100; }
   .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; border: none; background: none; color: var(--hint); font-family: 'DM Sans', sans-serif; font-size: 10px; cursor: pointer; transition: color .15s; letter-spacing: 0.04em; text-transform: uppercase; }
   .nav-btn.active { color: var(--accent); }
   .nav-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 10px 18px; font-size: 13px; color: var(--text); opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; z-index: 300; }
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 10px 18px; font-size: 13px; color: var(--text); opacity: 0; transition: all .25s; pointer-events: none; white-space: nowrap; z-index: 600; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
@@ -138,38 +146,51 @@
 <!-- SETUP -->
 <div class="setup-screen" id="setup-screen">
   <h2>racha/</h2>
-  <p>Para acessar um grupo use o link compartilhado. Para começar um grupo novo, clique abaixo.</p>
-  <button class="btn btn-primary" style="max-width:320px;margin-bottom:10px" onclick="showCreateModal()">criar novo grupo</button>
-  <button class="btn" style="max-width:320px" onclick="showEnterModal()">entrar com link ou código</button>
+  <p>Para acessar um grupo use o link compartilhado com você. Para criar um grupo novo, clique abaixo.</p>
+  <button class="btn btn-primary" style="max-width:320px;margin-bottom:10px" onclick="openModal('modal-criar')">criar novo grupo</button>
+  <button class="btn" style="max-width:320px" onclick="openModal('modal-entrar')">entrar com link ou código</button>
 </div>
 
 <!-- MODAL: criar grupo -->
-<div class="modal-bg" id="modal-create" onclick="closeModal('modal-create')">
-  <div class="modal-box" onclick="event.stopPropagation()">
+<div class="modal-bg" id="modal-criar">
+  <div class="modal-box">
     <div class="modal-title">criar novo grupo</div>
-    <div class="form-group"><label>nome do grupo</label><input type="text" id="m-name" placeholder="ex: Os Inconsequentes"/></div>
-    <div class="form-group"><label>membros (separados por vírgula)</label><input type="text" id="m-members" placeholder="Elton, Carol, Rafael, Bia, Thiago"/></div>
+    <div class="form-group">
+      <label>nome do grupo</label>
+      <input type="text" id="m-name" placeholder="ex: Os Inconsequentes"/>
+    </div>
+    <div class="form-group">
+      <label>membros (separados por vírgula)</label>
+      <input type="text" id="m-members" placeholder="Elton, Carol, Rafael, Bia, Thiago"/>
+    </div>
     <button class="btn btn-primary" onclick="doCreateGroup()">criar grupo</button>
-    <button class="btn" style="margin-top:8px" onclick="closeModal('modal-create')">cancelar</button>
+    <button class="btn" style="margin-top:8px" onclick="closeModal('modal-criar')">cancelar</button>
   </div>
 </div>
 
 <!-- MODAL: entrar com código -->
-<div class="modal-bg" id="modal-enter" onclick="closeModal('modal-enter')">
-  <div class="modal-box" onclick="event.stopPropagation()">
+<div class="modal-bg" id="modal-entrar">
+  <div class="modal-box">
     <div class="modal-title">entrar num grupo</div>
-    <div class="form-group"><label>cole o link ou código do grupo</label><input type="text" id="m-code" placeholder="https://... ou código"/></div>
+    <div class="form-group">
+      <label>cole o link ou código do grupo</label>
+      <input type="text" id="m-code" placeholder="https://rds-elton.github.io/rachide/?g=..."/>
+    </div>
     <button class="btn btn-primary" onclick="doEnterCode()">entrar</button>
-    <button class="btn" style="margin-top:8px" onclick="closeModal('modal-enter')">cancelar</button>
+    <button class="btn" style="margin-top:8px" onclick="closeModal('modal-entrar')">cancelar</button>
   </div>
 </div>
 
-<!-- MODAL: grupo criado -->
-<div class="modal-bg" id="modal-created">
-  <div class="modal-box" onclick="event.stopPropagation()">
+<!-- MODAL: grupo criado (exibe link copiável) -->
+<div class="modal-bg" id="modal-criado">
+  <div class="modal-box">
     <div class="modal-title">grupo criado! 🎉</div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">compartilhe este link com o grupo. só quem tiver o link consegue acessar.</p>
-    <div class="link
+    <div class="link-box" id="modal-link-text" onclick="copyModalLink()">—</div>
+    <button class="btn btn-primary" onclick="copyModalLink()">copiar link</button>
+    <button class="btn" style="margin-top:8px" onclick="goToGroup()">entrar no grupo</button>
+  </div>
+</div>
 
 <!-- APP -->
 <div class="app" id="main-app" style="display:none">
@@ -196,6 +217,7 @@
     <button class="tab" onclick="switchTab('adicionar',this)">+ Nova</button>
   </div>
 
+  <!-- DESPESAS -->
   <div id="sec-despesas" class="section active">
     <div class="card">
       <div class="card-title">despesas</div>
@@ -203,6 +225,7 @@
     </div>
   </div>
 
+  <!-- BALANÇO -->
   <div id="sec-balanco" class="section">
     <div class="card">
       <div class="card-title">posição de cada um</div>
@@ -210,6 +233,7 @@
     </div>
   </div>
 
+  <!-- PIX -->
   <div id="sec-pix" class="section">
     <div class="card" style="margin-bottom:10px">
       <div class="card-title">transferências sugeridas</div>
@@ -226,17 +250,24 @@
         <div class="form-group"><label>quem pagou</label><select id="p-from"></select></div>
         <div class="form-group"><label>para quem</label><select id="p-to"></select></div>
       </div>
-      <div class="form-group"><label>valor R$</label><input type="number" id="p-val" placeholder="0,00" min="0" step="0.01" inputmode="decimal"/></div>
+      <div class="form-group">
+        <label>valor R$</label>
+        <input type="text" id="p-val" placeholder="0,00" inputmode="decimal"/>
+      </div>
       <button class="btn" onclick="addPagamento()">registrar pagamento</button>
     </div>
   </div>
 
+  <!-- NOVA DESPESA -->
   <div id="sec-adicionar" class="section">
     <div class="card">
       <div class="card-title" id="form-title">nova despesa</div>
       <div class="form-group"><label>descrição</label><input type="text" id="f-desc" placeholder="ex: almoço pré-prova"/></div>
       <div class="form-row">
-        <div class="form-group"><label>valor R$</label><input type="number" id="f-valor" placeholder="0,00" min="0" step="0.01" inputmode="decimal"/></div>
+        <div class="form-group">
+          <label>valor R$</label>
+          <input type="text" id="f-valor" placeholder="0,00" inputmode="decimal"/>
+        </div>
         <div class="form-group"><label>categoria</label>
           <select id="f-cat">
             <option value="comida">🍺 comida</option>
@@ -262,6 +293,7 @@
   </div>
 </div>
 
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <button class="nav-btn active" id="nav-despesas" onclick="switchTab('despesas',null,this)">
     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="16" x2="12" y2="16"/></svg>lista
@@ -289,34 +321,49 @@ const firebaseConfig = {
   databaseURL: "https://os-inconsequentes-default-rtdb.firebaseio.com",
   projectId: "os-inconsequentes",
   storageBucket: "os-inconsequentes.firebasestorage.app",
-  messagingSenderId: "321467435840",
+  messagingSenderId: "321467535840",
   appId: "1:321467435840:web:72f1bd911f56d85f7088a5"
 };
 
 const fbApp = initializeApp(firebaseConfig);
 const db = getDatabase(fbApp);
+
 const CATS = { comida:"🍺", transporte:"🚗", hospedagem:"🏨", ingresso:"🎟", outros:"💸" };
-const brl = v => (v||0).toLocaleString("pt-BR", {minimumFractionDigits:2, maximumFractionDigits:2});
-const parseVal = id => parseFloat(document.getElementById(id).value.replace(",","."));
+const brl = v => (v||0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+const parseVal = id => parseFloat(document.getElementById(id).value.replace(',','.'));
 
 let groupId = null, groupData = null;
 let despesas = {}, pagamentos = {};
 let unsubD = null, unsubP = null;
 let selectedChips = [];
 let editingId = null;
+let pendingGroupLink = null;
 
+// ─── MODAL ────────────────────────────────────────────────────
+window.openModal = function(id) {
+  document.getElementById(id).classList.add('open');
+};
+window.closeModal = function(id) {
+  document.getElementById(id).classList.remove('open');
+};
+
+// ─── INIT ─────────────────────────────────────────────────────
 function init() {
   const g = new URLSearchParams(location.search).get('g');
-  if (g) { loadGroup(g); }
-  else {
+  if (g) {
+    document.getElementById('setup-screen').style.display = 'none';
+    loadGroup(g);
+  } else {
     document.getElementById('setup-screen').classList.add('open');
     document.getElementById('main-app').style.display = 'none';
   }
 }
 
+// ─── LOAD GROUP ───────────────────────────────────────────────
 function loadGroup(id) {
   groupId = id;
   document.getElementById('setup-screen').classList.remove('open');
+  document.getElementById('setup-screen').style.display = 'none';
   document.getElementById('main-app').style.display = '';
   setStatus('conectando...');
 
@@ -325,7 +372,8 @@ function loadGroup(id) {
     if (!groupData) { setStatus('grupo não encontrado', true); return; }
     document.getElementById('group-label').textContent = groupData.name;
     document.getElementById('group-code-display').textContent = `#${id.slice(0,6)}`;
-    document.getElementById('group-link').textContent = `${location.origin}${location.pathname}?g=${id}`;
+    const link = `${location.origin}${location.pathname}?g=${id}`;
+    document.getElementById('group-link').textContent = link;
     buildForm();
     setStatus('');
   }, err => setStatus('erro: ' + err.message, true));
@@ -336,45 +384,72 @@ function loadGroup(id) {
   unsubP = onValue(ref(db, `grupos/${id}/pagamentos`), snap => { pagamentos = snap.val()||{}; renderAll(); });
 }
 
-window.createGroup = async function() {
-  const name = prompt('Nome do grupo:');
-  if (!name?.trim()) return;
-  const raw = prompt('Membros (separados por vírgula):\nExemplo: Elton, Carol, Rafael, Bia, Thiago');
-  if (!raw) return;
+// ─── CREATE GROUP ─────────────────────────────────────────────
+window.doCreateGroup = async function() {
+  const name = document.getElementById('m-name').value.trim();
+  const raw = document.getElementById('m-members').value;
+  if (!name) { showToast('informe o nome do grupo'); return; }
   const members = raw.split(',').map(m=>m.trim()).filter(Boolean);
-  if (members.length < 2) { alert('Adicione pelo menos 2 membros.'); return; }
+  if (members.length < 2) { showToast('adicione pelo menos 2 membros'); return; }
+
   const id = Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,6);
-  await set(ref(db, `grupos/${id}/info`), { name: name.trim(), members, createdAt: Date.now() });
-  const link = `${location.origin}${location.pathname}?g=${id}`;
-  alert(`Grupo criado! 🎉\n\nLink do grupo:\n${link}\n\nGuarde este link — é a única forma de acessar.`);
-  location.href = link;
+  try {
+    await set(ref(db, `grupos/${id}/info`), { name, members, createdAt: Date.now() });
+    const link = `${location.origin}${location.pathname}?g=${id}`;
+    pendingGroupLink = { id, link };
+    closeModal('modal-criar');
+    document.getElementById('modal-link-text').textContent = link;
+    openModal('modal-criado');
+  } catch(e) { showToast('erro ao criar grupo: ' + e.message); }
 };
 
-window.enterCode = function() {
-  const input = prompt('Cole o link ou código do grupo:');
-  if (!input) return;
+window.copyModalLink = function() {
+  if (!pendingGroupLink) return;
+  navigator.clipboard.writeText(pendingGroupLink.link)
+    .then(() => showToast('link copiado ✓'))
+    .catch(() => showToast(pendingGroupLink.link));
+};
+
+window.goToGroup = function() {
+  if (!pendingGroupLink) return;
+  closeModal('modal-criado');
+  location.href = pendingGroupLink.link;
+};
+
+// ─── ENTER CODE ───────────────────────────────────────────────
+window.doEnterCode = function() {
+  const input = document.getElementById('m-code').value.trim();
+  if (!input) { showToast('cole o link ou código'); return; }
   const match = input.match(/[?&]g=([a-z0-9]+)/i);
-  if (match) { location.href = `${location.origin}${location.pathname}?g=${match[1]}`; }
-  else if (/^[a-z0-9]{8,}$/i.test(input.trim())) { location.href = `${location.origin}${location.pathname}?g=${input.trim()}`; }
-  else { alert('Link ou código inválido.'); }
+  if (match) {
+    closeModal('modal-entrar');
+    location.href = `${location.origin}${location.pathname}?g=${match[1]}`;
+  } else if (/^[a-z0-9]{8,}$/i.test(input)) {
+    closeModal('modal-entrar');
+    location.href = `${location.origin}${location.pathname}?g=${input}`;
+  } else {
+    showToast('link ou código inválido');
+  }
 };
 
+// ─── NAVIGATION ───────────────────────────────────────────────
 window.switchTab = function(name, tabEl, navEl) {
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(n=>n.classList.remove('active'));
   document.getElementById('sec-'+name).classList.add('active');
-  const map = {despesas:0,balanco:1,pix:2,adicionar:3};
+  const map = {despesas:0, balanco:1, pix:2, adicionar:3};
   document.querySelectorAll('.tab')[map[name]]?.classList.add('active');
   document.getElementById('nav-'+name)?.classList.add('active');
   renderAll();
 };
 
+// ─── RENDER ───────────────────────────────────────────────────
 function renderAll() {
   renderSummary(); renderDespesas(); renderBalanco(); renderTransfers(); renderPayments();
   const members = groupData?.members||[];
   const opts = members.map(m=>`<option>${m}</option>`).join('');
-  ['p-from','p-to'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=opts; });
+  ['p-from','p-to'].forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=opts; });
 }
 
 function renderSummary() {
@@ -389,7 +464,7 @@ function renderDespesas() {
   const el = document.getElementById('list-despesas');
   const list = Object.entries(despesas).sort((a,b)=>(b[1].ts||0)-(a[1].ts||0));
   if (!list.length) { el.innerHTML='<div class="empty">nenhuma despesa ainda</div>'; return; }
-  el.innerHTML = list.map(([id,e])=>{
+  el.innerHTML = list.map(([id,e]) => {
     const per = e.entre?.length ? brl(e.valor/e.entre.length) : '—';
     const edited = e.editedAt ? ' · <span style="color:var(--hint)">editado</span>' : '';
     return `<div class="expense-item">
@@ -413,14 +488,14 @@ function renderDespesas() {
 function calcBal() {
   const members = groupData?.members||[];
   const bal = {}; members.forEach(m=>bal[m]=0);
-  Object.values(despesas).forEach(e=>{
-    const share=(e.valor||0)/(e.entre?.length||1);
-    if(bal[e.pagoPor]!==undefined) bal[e.pagoPor]+=(e.valor||0);
+  Object.values(despesas).forEach(e => {
+    const share = (e.valor||0)/(e.entre?.length||1);
+    if (bal[e.pagoPor]!==undefined) bal[e.pagoPor]+=(e.valor||0);
     (e.entre||[]).forEach(p=>{ if(bal[p]!==undefined) bal[p]-=share; });
   });
-  Object.values(pagamentos).forEach(p=>{
-    if(bal[p.from]!==undefined) bal[p.from]-=(p.amount||0);
-    if(bal[p.to]!==undefined)   bal[p.to]+=(p.amount||0);
+  Object.values(pagamentos).forEach(p => {
+    if (bal[p.from]!==undefined) bal[p.from]-=(p.amount||0);
+    if (bal[p.to]!==undefined)   bal[p.to]+=(p.amount||0);
   });
   return bal;
 }
@@ -430,18 +505,22 @@ function renderBalanco() {
   const bal = calcBal();
   const members = groupData?.members||[];
   if (!members.length) { el.innerHTML='<div class="empty">sem membros</div>'; return; }
-  el.innerHTML = members.map(m=>{
-    const v=bal[m]||0;
-    const cls=v>0.01?'bal-positive':v<-0.01?'bal-negative':'bal-zero';
-    const lbl=v>0.01?`recebe R$ ${brl(v)}`:v<-0.01?`deve R$ ${brl(Math.abs(v))}`:'quite ✓';
-    return `<div class="balance-row"><div class="avatar">${m[0]}</div><span class="balance-name">${m}</span><span class="balance-val ${cls}">${lbl}</span></div>`;
+  el.innerHTML = members.map(m => {
+    const v = bal[m]||0;
+    const cls = v>0.01?'bal-positive':v<-0.01?'bal-negative':'bal-zero';
+    const lbl = v>0.01?`recebe R$ ${brl(v)}`:v<-0.01?`deve R$ ${brl(Math.abs(v))}`:'quite ✓';
+    return `<div class="balance-row">
+      <div class="avatar">${m[0]}</div>
+      <span class="balance-name">${m}</span>
+      <span class="balance-val ${cls}">${lbl}</span>
+    </div>`;
   }).join('');
 }
 
 function calcTransfers() {
-  const bal=calcBal();
-  const d=Object.entries(bal).filter(([,v])=>v<-0.01).map(([k,v])=>({name:k,amount:-v})).sort((a,b)=>b.amount-a.amount);
-  const c=Object.entries(bal).filter(([,v])=>v>0.01).map(([k,v])=>({name:k,amount:v})).sort((a,b)=>b.amount-a.amount);
+  const bal = calcBal();
+  const d = Object.entries(bal).filter(([,v])=>v<-0.01).map(([k,v])=>({name:k,amount:-v})).sort((a,b)=>b.amount-a.amount);
+  const c = Object.entries(bal).filter(([,v])=>v>0.01).map(([k,v])=>({name:k,amount:v})).sort((a,b)=>b.amount-a.amount);
   const out=[]; const dd=d.map(x=>({...x})); const cc=c.map(x=>({...x}));
   let i=0,j=0;
   while(i<dd.length&&j<cc.length){
@@ -454,32 +533,45 @@ function calcTransfers() {
 }
 
 function renderTransfers() {
-  const el=document.getElementById('list-transfers');
-  const t=calcTransfers();
-  if(!t.length){el.innerHTML='<div class="empty">tudo quite 🎉</div>';return;}
-  el.innerHTML=t.map(x=>`<div class="transfer-item"><span class="t-from">${x.from}</span><span class="t-arrow">→</span><span class="t-to">${x.to}</span><span class="t-val">R$ ${brl(x.amount)}</span><span class="pix-tag">PIX</span></div>`).join('');
+  const el = document.getElementById('list-transfers');
+  const t = calcTransfers();
+  if (!t.length) { el.innerHTML='<div class="empty">tudo quite 🎉</div>'; return; }
+  el.innerHTML = t.map(x=>`
+    <div class="transfer-item">
+      <span class="t-from">${x.from}</span>
+      <span class="t-arrow">→</span>
+      <span class="t-to">${x.to}</span>
+      <span class="t-val">R$ ${brl(x.amount)}</span>
+      <span class="pix-tag">PIX</span>
+    </div>`).join('');
 }
 
 function renderPayments() {
-  const el=document.getElementById('list-payments');
-  const list=Object.values(pagamentos).sort((a,b)=>(b.ts||0)-(a.ts||0));
-  if(!list.length){el.innerHTML='<div class="empty">nenhum ainda</div>';return;}
-  el.innerHTML=list.map(p=>`<div class="pay-row"><span class="pay-names">${p.from} → ${p.to}</span><span class="pay-val">R$ ${brl(p.amount)}</span></div>`).join('');
+  const el = document.getElementById('list-payments');
+  const list = Object.values(pagamentos).sort((a,b)=>(b.ts||0)-(a.ts||0));
+  if (!list.length) { el.innerHTML='<div class="empty">nenhum ainda</div>'; return; }
+  el.innerHTML = list.map(p=>`
+    <div class="pay-row">
+      <span class="pay-names">${p.from} → ${p.to}</span>
+      <span class="pay-val">R$ ${brl(p.amount)}</span>
+    </div>`).join('');
 }
 
+// ─── FORM ─────────────────────────────────────────────────────
 function buildForm() {
-  const members=groupData?.members||[];
-  selectedChips=[...members];
-  const opts=members.map(m=>`<option>${m}</option>`).join('');
-  const pp=document.getElementById('f-pagopor'); if(pp) pp.innerHTML=opts;
-  const chips=document.getElementById('f-chips');
-  if(chips) chips.innerHTML=members.map(m=>`<span class="chip on" id="chip-${m}" onclick="toggleChip('${m}')">${m}</span>`).join('');
+  const members = groupData?.members||[];
+  selectedChips = [...members];
+  const opts = members.map(m=>`<option>${m}</option>`).join('');
+  const pp = document.getElementById('f-pagopor'); if(pp) pp.innerHTML=opts;
+  const chips = document.getElementById('f-chips');
+  if(chips) chips.innerHTML = members.map(m=>`
+    <span class="chip on" id="chip-${m}" onclick="toggleChip('${m}')">${m}</span>`).join('');
 }
 
-window.toggleChip=function(name){
-  if(selectedChips.includes(name)){
-    if(selectedChips.length<=1)return;
-    selectedChips=selectedChips.filter(p=>p!==name);
+window.toggleChip = function(name) {
+  if (selectedChips.includes(name)) {
+    if (selectedChips.length<=1) return;
+    selectedChips = selectedChips.filter(p=>p!==name);
     document.getElementById('chip-'+name)?.classList.remove('on');
   } else {
     selectedChips.push(name);
@@ -487,84 +579,92 @@ window.toggleChip=function(name){
   }
 };
 
-window.editDespesa=function(id){
-  const e=despesas[id]; if(!e)return;
-  editingId=id;
+// ─── EDIT ─────────────────────────────────────────────────────
+window.editDespesa = function(id) {
+  const e = despesas[id]; if(!e) return;
+  editingId = id;
   switchTab('adicionar');
-  document.getElementById('form-title').textContent='editar despesa';
-  document.getElementById('f-desc').value=e.desc;
-  document.getElementById('f-valor').value=e.valor;
-  document.getElementById('f-cat').value=e.cat;
-  document.getElementById('f-pagopor').value=e.pagoPor;
-  document.getElementById('btn-save').textContent='salvar alterações';
-  document.getElementById('btn-cancel').style.display='';
-  const members=groupData?.members||[];
-  selectedChips=[...(e.entre||[])];
-  members.forEach(m=>{ document.getElementById('chip-'+m)?.classList.toggle('on',selectedChips.includes(m)); });
+  document.getElementById('form-title').textContent = 'editar despesa';
+  document.getElementById('f-desc').value = e.desc;
+  document.getElementById('f-valor').value = String(e.valor).replace('.',',');
+  document.getElementById('f-cat').value = e.cat;
+  document.getElementById('f-pagopor').value = e.pagoPor;
+  document.getElementById('btn-save').textContent = 'salvar alterações';
+  document.getElementById('btn-cancel').style.display = '';
+  const members = groupData?.members||[];
+  selectedChips = [...(e.entre||[])];
+  members.forEach(m => { document.getElementById('chip-'+m)?.classList.toggle('on', selectedChips.includes(m)); });
 };
 
-window.cancelEdit=function(){
-  editingId=null;
-  document.getElementById('form-title').textContent='nova despesa';
-  document.getElementById('f-desc').value='';
-  document.getElementById('f-valor').value='';
-  document.getElementById('btn-save').textContent='salvar despesa';
-  document.getElementById('btn-cancel').style.display='none';
+window.cancelEdit = function() {
+  editingId = null;
+  document.getElementById('form-title').textContent = 'nova despesa';
+  document.getElementById('f-desc').value = '';
+  document.getElementById('f-valor').value = '';
+  document.getElementById('btn-save').textContent = 'salvar despesa';
+  document.getElementById('btn-cancel').style.display = 'none';
   buildForm();
 };
 
-window.saveDespesa=async function(){
-  const desc=document.getElementById('f-desc').value.trim();
-  const valor=parseVal("f-valor");
-  const pagoPor=document.getElementById('f-pagopor').value;
-  const cat=document.getElementById('f-cat').value;
-  if(!desc||isNaN(valor)||valor<=0||selectedChips.length===0){showToast('preencha todos os campos');return;}
+// ─── SAVE DESPESA ─────────────────────────────────────────────
+window.saveDespesa = async function() {
+  const desc    = document.getElementById('f-desc').value.trim();
+  const valor   = parseVal('f-valor');
+  const pagoPor = document.getElementById('f-pagopor').value;
+  const cat     = document.getElementById('f-cat').value;
+  if (!desc || isNaN(valor) || valor<=0 || selectedChips.length===0) { showToast('preencha todos os campos'); return; }
   try {
-    if(editingId){
-      await update(ref(db,`grupos/${groupId}/despesas/${editingId}`),{desc,valor,pagoPor,entre:selectedChips,cat,editedAt:Date.now()});
-      showToast('despesa atualizada ✓'); cancelEdit();
+    if (editingId) {
+      await update(ref(db,`grupos/${groupId}/despesas/${editingId}`), {desc,valor,pagoPor,entre:selectedChips,cat,editedAt:Date.now()});
+      showToast('despesa atualizada ✓');
+      cancelEdit();
     } else {
-      await push(ref(db,`grupos/${groupId}/despesas`),{desc,valor,pagoPor,entre:selectedChips,cat,ts:Date.now()});
+      await push(ref(db,`grupos/${groupId}/despesas`), {desc,valor,pagoPor,entre:selectedChips,cat,ts:Date.now()});
       document.getElementById('f-desc').value='';
       document.getElementById('f-valor').value='';
       showToast('despesa salva ✓');
     }
     switchTab('despesas');
-  } catch(e){showToast('erro: '+e.message);}
+  } catch(e) { showToast('erro: '+e.message); }
 };
 
-window.deleteDespesa=async function(id){
-  if(!confirm(`Excluir "${despesas[id]?.desc}"?`))return;
+window.deleteDespesa = async function(id) {
+  if (!confirm(`Excluir "${despesas[id]?.desc}"?`)) return;
   try { await remove(ref(db,`grupos/${groupId}/despesas/${id}`)); showToast('excluída'); }
-  catch(e){showToast('erro: '+e.message);}
+  catch(e) { showToast('erro: '+e.message); }
 };
 
-window.addPagamento=async function(){
-  const from=document.getElementById('p-from').value;
-  const to=document.getElementById('p-to').value;
-  const amount=parseVal("p-val");
-  if(from===to||isNaN(amount)||amount<=0){showToast('dados inválidos');return;}
+// ─── PAGAMENTO ────────────────────────────────────────────────
+window.addPagamento = async function() {
+  const from   = document.getElementById('p-from').value;
+  const to     = document.getElementById('p-to').value;
+  const amount = parseVal('p-val');
+  if (from===to || isNaN(amount) || amount<=0) { showToast('dados inválidos'); return; }
   try {
-    await push(ref(db,`grupos/${groupId}/pagamentos`),{from,to,amount,ts:Date.now()});
+    await push(ref(db,`grupos/${groupId}/pagamentos`), {from,to,amount,ts:Date.now()});
     document.getElementById('p-val').value='';
     showToast('pagamento registrado ✓');
-  } catch(e){showToast('erro: '+e.message);}
+  } catch(e) { showToast('erro: '+e.message); }
 };
 
-window.copyLink=function(){
-  const link=`${location.origin}${location.pathname}?g=${groupId}`;
+// ─── LINK ─────────────────────────────────────────────────────
+window.copyLink = function() {
+  const link = `${location.origin}${location.pathname}?g=${groupId}`;
   navigator.clipboard.writeText(link).then(()=>showToast('link copiado ✓')).catch(()=>showToast(link));
 };
 
-function setStatus(msg,err){
-  const el=document.getElementById('status-bar');
-  el.textContent=msg; el.style.color=err?'var(--red)':'var(--hint)';
+// ─── UTILS ────────────────────────────────────────────────────
+function setStatus(msg, err) {
+  const el = document.getElementById('status-bar');
+  el.textContent = msg;
+  el.style.color = err ? 'var(--red)' : 'var(--hint)';
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
 }
 
 init();
